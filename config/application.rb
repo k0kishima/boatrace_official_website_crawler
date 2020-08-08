@@ -35,5 +35,9 @@ module App
     config.api_only = true
 
     config.time_zone = 'Asia/Tokyo'
+
+    config.active_job.queue_adapter = :sidekiq
+
+    config.x.redis_url = ENV.fetch('SIDEKIQ_REDIS_URL') { 'redis://127.0.0.1:6379' }
   end
 end
