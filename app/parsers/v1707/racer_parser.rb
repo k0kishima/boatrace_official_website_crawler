@@ -7,7 +7,7 @@ module V1707
     def parse
       raise ::ParserError::DataNotFound.new if retired?
       {
-          family_name: family_name,
+          last_name: last_name,
           first_name: first_name.presence || '',
           registration_number: registration_number,
           birth_date: birth_date,
@@ -30,8 +30,8 @@ module V1707
         @names ||= full_name.split(/[\s　]+/)
       end
 
-      def family_name
-        @family_name ||= names[0]
+      def last_name
+        @last_name ||= names[0]
       end
 
       def first_name

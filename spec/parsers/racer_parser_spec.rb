@@ -16,7 +16,7 @@ describe 'racer parsing' do
 
       it 'parses racer profile' do
         expect(subject).to eq ({
-            :family_name=>"桐生",
+            :last_name=>"桐生",
             :first_name=>"順平",
             :registration_number=>4444,
             :birth_date=>Date.new(1986, 10, 7),
