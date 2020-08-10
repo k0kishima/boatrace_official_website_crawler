@@ -34,7 +34,7 @@ module V1707
     attr_reader :current_row
 
       def race_entry_table
-        @race_entry_table ||= doc.search('.table1').last
+        doc.search('.table1').last
       end
       memoize :race_entry_table
 

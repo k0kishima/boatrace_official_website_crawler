@@ -3,6 +3,7 @@ require 'rails_helper'
 describe 'race entry parsing' do
   context 'in version 1707' do
     subject { parser.parse }
+
     let(:parser_class) { V1707::RaceEntryParser }
     let(:parser) { parser_class.new(File.new(file_path, 'r')) }
 
