@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'race entry parsing' do
+describe 'event parsing' do
   context 'in version 1707' do
     subject { parser.parse }
 
