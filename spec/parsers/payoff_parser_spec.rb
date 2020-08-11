@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'race payoff parsing' do
+describe 'payoff parsing' do
   context 'in version 1707' do
     subject { parser.parse }
 
