@@ -37,8 +37,11 @@ module App
     config.time_zone = 'Asia/Tokyo'
 
     config.active_job.queue_adapter = :sidekiq
-
     config.x.redis_url = ENV.fetch('SIDEKIQ_REDIS_URL') { 'redis://127.0.0.1:6379' }
+
+    config.x.fundamental_data_repository.api_base_url = ENV.fetch('FUNDAMENTAL_DATA_API_BASE_URL') { 'http://fundamental-data-server:3000' }
+    config.x.fundamental_data_repository.application_token = ENV.fetch('FUNDAMENTAL_DATA_API_APPLICATION_TOKEN') { '*****' }
+
     config.x.official_website_proxy.base_url = ENV.fetch('OFFICIAL_WEBSITE_PROXY_BASE_URL') { 'http://official-website-proxy:5000' }
     config.x.official_website_proxy.official_website_version = ENV.fetch('OFFICIAL_WEBSITE_VERSION') { 1707 }
   end
