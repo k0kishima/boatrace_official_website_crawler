@@ -37,6 +37,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'faraday'
+gem 'faraday_middleware'
 gem 'memoist'
 gem 'nokogiri'
 gem 'redis-namespace'
