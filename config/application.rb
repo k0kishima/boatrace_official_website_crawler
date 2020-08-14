@@ -39,5 +39,7 @@ module App
     config.active_job.queue_adapter = :sidekiq
 
     config.x.redis_url = ENV.fetch('SIDEKIQ_REDIS_URL') { 'redis://127.0.0.1:6379' }
+    config.x.official_website_proxy.base_url = ENV.fetch('OFFICIAL_WEBSITE_PROXY_BASE_URL') { 'http://official-website-proxy:5000' }
+    config.x.official_website_proxy.official_website_version = ENV.fetch('OFFICIAL_WEBSITE_VERSION') { 1707 }
   end
 end
