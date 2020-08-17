@@ -10,6 +10,27 @@ module FundamentalDataRepository
   APP_TOKEN = Rails.application.config.x.fundamental_data_repository.application_token
 
   class << self
+    def create_many_racers(racers)
+      connection = ConnectionBuilder.build(BASE_URL)
+      response = connection.post do |req|
+        req.url 'api/internal/v1/racers/create_many'
+        req.body = {
+            access_token: APP_TOKEN,
+            racers: racers.map do |racer|
+              {
+                  # HACK: アダプタみたいなクラスに切り出した方がよさそう
+                  registration_number: racer.registration_number,
+                  last_name: racer.last_name,
+                  first_name: racer.first_name,
+                  gender:  racer.gender,
+              }
+            end
+        }
+      end
+      handle_response(response)
+      true
+    end
+
     def create_or_update_many_events(events)
       connection = ConnectionBuilder.build(BASE_URL)
       response = connection.post do |req|
@@ -18,7 +39,6 @@ module FundamentalDataRepository
             access_token: APP_TOKEN,
             events: events.map do |event|
               {
-                  # HACK: アダプタみたいなクラスに切り出した方がよさそう
                   stadium_tel_code: event.stadium_tel_code,
                   starts_on: event.starts_on,
                   title: event.title,
