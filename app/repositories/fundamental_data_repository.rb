@@ -10,7 +10,7 @@ module FundamentalDataRepository
   APP_TOKEN = Rails.application.config.x.fundamental_data_repository.application_token
 
   class << self
-    def post_events(events)
+    def create_or_update_many_events(events)
       connection = ConnectionBuilder.build(BASE_URL)
       response = connection.post do |req|
         req.url 'api/internal/v1/events/create_or_update_many'

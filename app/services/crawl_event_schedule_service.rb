@@ -2,7 +2,7 @@ class CrawlEventScheduleService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.post_events(events)
+    FundamentalDataRepository.create_or_update_many_events(events)
   end
 
   private
