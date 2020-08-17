@@ -23,5 +23,15 @@ module OfficialWebsiteContentRepository
       }.to_query
       URI.open("#{BASE_URL}/file?#{query}")
     end
+
+    def event_entry_file(version: USE_VERSION, stadium_tel_code: , event_starts_on: )
+      query = {
+          version: version,
+          page_type: :event_entries_page,
+          stadium_tel_code: stadium_tel_code,
+          event_starts_on: event_starts_on,
+      }.to_query
+      URI.open("#{BASE_URL}/file?#{query}")
+    end
   end
 end
