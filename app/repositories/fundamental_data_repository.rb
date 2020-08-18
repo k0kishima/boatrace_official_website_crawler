@@ -57,6 +57,19 @@ module FundamentalDataRepository
       true
     end
 
+    def make_racer_retire(racer_registration_number)
+      connection = ConnectionBuilder.build(BASE_URL)
+      response = connection.patch do |req|
+        req.url "api/internal/v1/racers/#{racer_registration_number}/retire"
+        req.body = {
+            access_token: APP_TOKEN,
+        }
+      end
+      handle_response(response)
+      true
+    end
+
+
     def create_or_update_many_events(events)
       connection = ConnectionBuilder.build(BASE_URL)
       response = connection.post do |req|

@@ -3,6 +3,8 @@ class CrawlRacerProfileService
 
   def call
     FundamentalDataRepository.update_racer(racer)
+  rescue ::ParserError::DataNotFound
+    FundamentalDataRepository.make_racer_retire(racer_registration_number)
   end
 
   private
