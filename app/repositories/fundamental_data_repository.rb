@@ -10,6 +10,19 @@ module FundamentalDataRepository
   APP_TOKEN = Rails.application.config.x.fundamental_data_repository.application_token
 
   class << self
+    def fetch_events(min_starts_on: , max_starts_on:)
+      connection = ConnectionBuilder.build(BASE_URL)
+      response = connection.get do |req|
+        req.url 'api/internal/v1/events'
+        req.body = {
+            access_token: APP_TOKEN,
+            min_starts_on: min_starts_on,
+            max_starts_on: max_starts_on,
+        }
+      end
+      handle_response(response)
+    end
+
     def create_many_racers(racers)
       connection = ConnectionBuilder.build(BASE_URL)
       response = connection.post do |req|
