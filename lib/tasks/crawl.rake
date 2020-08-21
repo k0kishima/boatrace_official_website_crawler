@@ -3,6 +3,14 @@ namespace :crawl do
     (ENV['USE_VERSION'].presence || Rails.application.config.x.official_website_proxy.latest_official_website_version).to_i
   end
 
+  def race_params
+    {
+      date: (ENV['DATE'].presence || Time.zone.today).to_date,
+      stadium_tel_code: ENV['STADIUM_TEL_CODE'].to_i,
+      race_number: ENV['RACE_NUMBER'].to_i,
+    }
+  end
+
   desc 'Crawl event in specified year and month'
   task events: :environment do
     year = (ENV['YEAR'].presence || Time.zone.today.year).to_i
@@ -32,23 +40,11 @@ namespace :crawl do
 
   desc 'Crawl entries on specified race'
   task race_entries: :environment do
-    date = (ENV['DATE'].presence || Time.zone.today).to_date
-    stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
-    race_number = ENV['RACE_NUMBER'].to_i
-    CrawlRaceEntryService.call(version: official_web_site_version,
-                               date: date,
-                               stadium_tel_code: stadium_tel_code,
-                               race_number: race_number)
+    CrawlRaceEntryService.call(version: official_web_site_version, **race_params)
   end
 
   desc 'Crawl racer conditions on specified race'
   task racer_conditions: :environment do
-    date = (ENV['DATE'].presence || Time.zone.today).to_date
-    stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
-    race_number = ENV['RACE_NUMBER'].to_i
-    CrawlRacerConditionService.call(version: official_web_site_version,
-                                    date: date,
-                                    stadium_tel_code: stadium_tel_code,
-                                    race_number: race_number)
+    CrawlRacerConditionService.call(version: official_web_site_version, **race_params)
   end
 end
