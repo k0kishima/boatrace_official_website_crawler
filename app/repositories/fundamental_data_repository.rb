@@ -1,3 +1,9 @@
+# Hack
+#
+# FundamentalDataRepository.fetch_events みたいな粒度じゃなくて、
+# EventRepository.fetch
+# みたいにすべきだった
+#
 module FundamentalDataRepository
   class BadRequest < ::ActionController::BadRequest; end
   class Unauthorized < ::ActionController::BadRequest; end
