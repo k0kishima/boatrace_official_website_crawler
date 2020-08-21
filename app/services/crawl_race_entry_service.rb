@@ -2,6 +2,13 @@ class CrawlRaceEntryService
   include ServiceBase
 
   def call
+    # NOTE:
+    #
+    # 前検情報のページでレーサーは同様に一括登録しているが、追加斡旋者がいる場合そこには載ってないからこのタイミングでとるしかない
+    # かなりリクエスト数増えるが冪等性担保してあるのと、レコードの有無の確認にもそもそもリクエスト発生してその方が余計コスト増えるのでこの方式
+    # これが一番シンプルなはず（特にかく全員createしにいく・すでにレコードあったら影響がない）
+    #
+    FundamentalDataRepository.create_many_racers(racers)
     FundamentalDataRepository.create_or_update_many_race_entries(race_entries)
   end
 
@@ -32,6 +39,15 @@ class CrawlRaceEntryService
                       race_number: race_number,
                       racer_registration_number: attributes.fetch(:racer_registration_number),
                       pit_number: attributes.fetch(:pit_number))
+      end
+    end
+
+    Racer = Struct.new(:registration_number, :last_name, :first_name, keyword_init: true)
+    def racers
+      parser.parse.map do |attributes|
+        Racer.new(registration_number: attributes.fetch(:racer_registration_number),
+                  last_name: attributes.fetch(:racer_last_name),
+                  first_name: attributes.fetch(:racer_first_name))
       end
     end
 end

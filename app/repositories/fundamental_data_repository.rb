@@ -41,7 +41,7 @@ module FundamentalDataRepository
                   registration_number: racer.registration_number,
                   last_name: racer.last_name,
                   first_name: racer.first_name,
-                  gender:  racer.gender,
+                  gender:  racer.try(:gender),
               }
             end
         }
