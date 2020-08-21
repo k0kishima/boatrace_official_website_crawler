@@ -3,9 +3,9 @@ class EventHolding
   include ActiveModel::Attributes
   include ActiveModel::Validations
 
+  attribute :stadium_tel_code, :integer
   attribute :date, :date
-  attribute :day, :date
 
+  validates :stadium_tel_code, presence: true, inclusion: 1..24
   validates :date, presence: true
-  validates :day, presence: true
 end
