@@ -3,7 +3,7 @@ class CrawlEventEntryService
 
   def call
     # ここではupsertは使わない（パース対象のページから完全データが取れないので使えない）
-    FundamentalDataRepository.create_many_racers(events)
+    FundamentalDataRepository.create_many_racers(racers)
   end
 
   private
@@ -23,7 +23,7 @@ class CrawlEventEntryService
     end
 
     Racer = Struct.new(:registration_number, :last_name, :first_name, :gender, keyword_init: true)
-    def events
+    def racers
       parser.parse.map do |attributes|
         Racer.new(registration_number: attributes.fetch(:racer_registration_number),
                   last_name: attributes.fetch(:racer_last_name),

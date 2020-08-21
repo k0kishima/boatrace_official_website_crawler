@@ -16,4 +16,17 @@ namespace :crawl do
     end
     CrawlEventScheduleService.call(version: official_web_site_version, year: date.year, month: date.month)
   end
+
+  desc 'Crawl event entries on specified date'
+  task event_entries: :environment do
+    date = (ENV['DATE'].presence || Time.zone.today).to_date
+    if Time.zone.tomorrow < date
+      raise StandardError.new('Cannot fetch event entries on which after the day after tomorrow')
+    end
+    FundamentalDataRepository.fetch_events(min_starts_on: date, max_starts_on: date).each do |attribute|
+      CrawlEventEntryService.call(version: official_web_site_version,
+                                  stadium_tel_code: attribute.fetch('stadium_tel_code'),
+                                  event_starts_on: date)
+    end
+  end
 end
