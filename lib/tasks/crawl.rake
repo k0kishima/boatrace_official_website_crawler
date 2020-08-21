@@ -30,7 +30,7 @@ namespace :crawl do
     end
   end
 
-  desc 'Crawl race entry on specified date'
+  desc 'Crawl entries on specified race'
   task race_entries: :environment do
     date = (ENV['DATE'].presence || Time.zone.today).to_date
     stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
@@ -39,5 +39,16 @@ namespace :crawl do
                                date: date,
                                stadium_tel_code: stadium_tel_code,
                                race_number: race_number)
+  end
+
+  desc 'Crawl racer conditions on specified race'
+  task racer_conditions: :environment do
+    date = (ENV['DATE'].presence || Time.zone.today).to_date
+    stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
+    race_number = ENV['RACE_NUMBER'].to_i
+    CrawlRacerConditionService.call(version: official_web_site_version,
+                                    date: date,
+                                    stadium_tel_code: stadium_tel_code,
+                                    race_number: race_number)
   end
 end
