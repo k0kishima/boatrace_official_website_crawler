@@ -29,4 +29,15 @@ namespace :crawl do
                                   event_starts_on: date)
     end
   end
+
+  desc 'Crawl race entry on specified date'
+  task race_entries: :environment do
+    date = (ENV['DATE'].presence || Time.zone.today).to_date
+    stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
+    race_number = ENV['RACE_NUMBER'].to_i
+    CrawlRaceEntryService.call(version: official_web_site_version,
+                               date: date,
+                               stadium_tel_code: stadium_tel_code,
+                               race_number: race_number)
+  end
 end
