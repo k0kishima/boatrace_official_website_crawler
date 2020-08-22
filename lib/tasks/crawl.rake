@@ -59,8 +59,13 @@ namespace :crawl do
     CrawlWeatherConditionService.call(version: official_web_site_version, **race_params, in_performance: true)
   end
 
-  desc 'Crawl entries on specified race'
+  desc 'Crawl exhibition records on specified race'
   task race_exhibition_records: :environment do
     CrawlRaceExhibitionRecordService.call(version: official_web_site_version, **race_params)
+  end
+
+  desc 'Crawl records on specified race'
+  task race_records: :environment do
+    CrawlRaceRecordService.call(version: official_web_site_version, **race_params)
   end
 end

@@ -1,5 +1,5 @@
 class DisqualificationFactory
-  def self.create(mark)
+  def self.create!(mark)
     case mark
     when '転'
       :capsize
