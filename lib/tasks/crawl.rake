@@ -78,4 +78,9 @@ namespace :crawl do
   task motor_maintenances: :environment do
     CrawlMotorMaintenanceService.call(version: official_web_site_version, **race_params)
   end
+
+  desc 'Crawl payoff on specified race'
+  task payoffs: :environment do
+    CrawlPayoffService.call(version: official_web_site_version, **race_params)
+  end
 end
