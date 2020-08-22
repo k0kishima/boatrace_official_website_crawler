@@ -16,6 +16,7 @@ namespace :crawl do
     year = (ENV['YEAR'].presence || Time.zone.today.year).to_i
     month = (ENV['MONTH'].presence || Time.zone.today.month).to_i
     date = Date.new(year, month)
+
     # NOTE:
     # 公式サイトの仕様変更で何ヶ月先取れるかは変わるはず
     # リニューアルされた時点で要修正
@@ -56,5 +57,10 @@ namespace :crawl do
   desc 'Crawl weather condition after race'
   task weather_condition_after_race: :environment do
     CrawlWeatherConditionService.call(version: official_web_site_version, **race_params, in_performance: true)
+  end
+
+  desc 'Crawl entries on specified race'
+  task race_exhibition_records: :environment do
+    CrawlRaceExhibitionRecordService.call(version: official_web_site_version, **race_params)
   end
 end
