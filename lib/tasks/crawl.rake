@@ -68,4 +68,9 @@ namespace :crawl do
   task race_records: :environment do
     CrawlRaceRecordService.call(version: official_web_site_version, **race_params)
   end
+
+  desc 'Crawl boat settings on specified race'
+  task boat_settings: :environment do
+    CrawlBoatSettingService.call(version: official_web_site_version, **race_params)
+  end
 end
