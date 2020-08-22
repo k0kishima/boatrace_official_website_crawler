@@ -47,4 +47,14 @@ namespace :crawl do
   task racer_conditions: :environment do
     CrawlRacerConditionService.call(version: official_web_site_version, **race_params)
   end
+
+  desc 'Crawl weather condition before race'
+  task weather_condition_before_race: :environment do
+    CrawlWeatherConditionService.call(version: official_web_site_version, **race_params, in_performance: false)
+  end
+
+  desc 'Crawl weather condition after race'
+  task weather_condition_after_race: :environment do
+    CrawlWeatherConditionService.call(version: official_web_site_version, **race_params, in_performance: true)
+  end
 end
