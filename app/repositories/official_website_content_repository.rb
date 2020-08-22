@@ -1,5 +1,11 @@
 require 'open-uri'
 
+# Hack
+#
+# これもFundamentalDataRepository と同様
+# サービスの単位でクラスは粒度大きすぎるので
+# RacerProfileFileRepository.fetch みたいにすべきだった
+#
 module OfficialWebsiteContentRepository
   BASE_URL = Rails.application.config.x.official_website_proxy.base_url
   USE_VERSION = Rails.application.config.x.official_website_proxy.official_website_version
@@ -69,6 +75,17 @@ module OfficialWebsiteContentRepository
       query = {
           version: version,
           page_type: :race_result_page,
+          stadium_tel_code: stadium_tel_code,
+          race_opened_on: date,
+          race_number: race_number,
+      }.to_query
+      URI.open("#{BASE_URL}/file?#{query}")
+    end
+
+    def race_odds_file(version: USE_VERSION, stadium_tel_code: , date: , race_number:)
+      query = {
+          version: version,
+          page_type: :race_odds_page,
           stadium_tel_code: stadium_tel_code,
           race_opened_on: date,
           race_number: race_number,
