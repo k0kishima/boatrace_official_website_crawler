@@ -39,6 +39,15 @@ namespace :crawl do
     end
   end
 
+  desc 'Crawl event entries on specified date'
+  task motor_renewal: :environment do
+    date = (ENV['DATE'].presence || Time.zone.today).to_date
+    stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
+    CrawlMotorRenewalService.call(version: official_web_site_version,
+                                  stadium_tel_code: stadium_tel_code,
+                                  event_starts_on: date)
+  end
+
   desc 'Crawl entries on specified race'
   task race_entries: :environment do
     CrawlRaceEntryService.call(version: official_web_site_version, **race_params)
