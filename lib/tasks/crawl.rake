@@ -16,32 +16,21 @@ namespace :crawl do
     year = (ENV['YEAR'].presence || Time.zone.today.year).to_i
     month = (ENV['MONTH'].presence || Time.zone.today.month).to_i
     date = Date.new(year, month)
-
-    # NOTE:
-    # 公式サイトの仕様変更で何ヶ月先取れるかは変わるはず
-    # リニューアルされた時点で要修正
-    if 2.month.since.beginning_of_month.to_date <= date
-      raise StandardError.new('Cannot fetch schedules in which 2 months ahead')
-    end
     CrawlEventScheduleService.call(version: official_web_site_version, year: date.year, month: date.month)
   end
 
   desc 'Crawl event entries on specified date at specified stadium'
   task event_entries: :environment do
-    date = (ENV['DATE'].presence || Time.zone.today).to_date
-    stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
     CrawlEventEntryService.call(version: official_web_site_version,
-                                stadium_tel_code: stadium_tel_code,
-                                event_starts_on: date)
+                                stadium_tel_code: ENV['STADIUM_TEL_CODE'].to_i,
+                                event_starts_on: (ENV['DATE'].presence || Time.zone.today).to_date)
   end
 
-  desc 'Crawl event entries on specified date'
-  task motor_renewal: :environment do
-    date = (ENV['DATE'].presence || Time.zone.today).to_date
-    stadium_tel_code = ENV['STADIUM_TEL_CODE'].to_i
+  desc 'Crawl motor renewal on specified date'
+  task motor_renewals: :environment do
     CrawlMotorRenewalService.call(version: official_web_site_version,
-                                  stadium_tel_code: stadium_tel_code,
-                                  event_starts_on: date)
+                                  stadium_tel_code: ENV['STADIUM_TEL_CODE'].to_i,
+                                  event_starts_on: (ENV['DATE'].presence || Time.zone.today).to_date)
   end
 
   desc 'Crawl entries on specified race'
@@ -92,5 +81,27 @@ namespace :crawl do
   desc 'Crawl oddses on specified race'
   task oddses: :environment do
     CrawlOddsService.call(version: official_web_site_version, **race_params)
+  end
+
+  namespace :bulk do
+    desc 'Crawl event entries on specified date'
+    task event_entries: :environment do
+      date = (ENV['DATE'].presence || Time.zone.today).to_date
+      FundamentalDataRepository.fetch_events(min_starts_on: date, max_starts_on: date).each do |attribute|
+        CrawlEventEntryService.call(version: official_web_site_version,
+                                    stadium_tel_code: attribute.fetch('stadium_tel_code'),
+                                    event_starts_on: date)
+      end
+    end
+
+    desc 'Crawl motor renewal on specified date'
+    task motor_renewals: :environment do
+      date = (ENV['DATE'].presence || Time.zone.today).to_date
+      FundamentalDataRepository.fetch_events(min_starts_on: date, max_starts_on: date).each do |attribute|
+        CrawlMotorRenewalService.call(version: official_web_site_version,
+                                      stadium_tel_code: attribute.fetch('stadium_tel_code'),
+                                      event_starts_on: date)
+      end
+    end
   end
 end
