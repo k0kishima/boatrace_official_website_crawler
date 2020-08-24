@@ -33,6 +33,11 @@ namespace :crawl do
                                   event_starts_on: (ENV['DATE'].presence || Time.zone.today).to_date)
   end
 
+  desc 'Crawl information of specified race'
+  task race: :environment do
+    CrawlRaceService.call(version: official_web_site_version, **race_params)
+  end
+
   desc 'Crawl entries on specified race'
   task race_entries: :environment do
     CrawlRaceEntryService.call(version: official_web_site_version, **race_params)
