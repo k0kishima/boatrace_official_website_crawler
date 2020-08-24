@@ -25,8 +25,9 @@ module V1707
                 title:            series_cell.text,
                 starts_on:        date_pointer,
                 days:             series_days,
-                grade:            grade_by(html_class: series_cell.attribute('class').value, title: series_cell.text),
-                kind:             kind_by(html_class: series_cell.attribute('class').value, title: series_cell.text),
+                # hack: ここでは単純にパースだけを行い、gradeやkindはファクトリでenum生成みたいな方がよさそう
+                grade:            grade_by(html_class: series_cell.attribute('class').value, title: series_cell.text).downcase,
+                kind:             kind_by(html_class: series_cell.attribute('class').value, title: series_cell.text).downcase,
             }
           end
 
@@ -100,24 +101,27 @@ module V1707
         return grade if grade.present?
 
         match = title.tr('ＧⅠⅡⅢ１２３', 'G123123').match(/G[1-3]{1}/)
-        match[0] if match.present?
+        if match.present?
+          match[0]
+        else
+          'no_grade'
+        end
       end
 
       def kind_by(html_class: , title:)
         kind = case html_class
                when 'is-gradeColorRookie'
-                 'Rookie'
+                 'rookie'
                when 'is-gradeColorVenus'
-                 'Venus'
+                 'venus'
                when 'is-gradeColorLady'
-                 'Lady'
+                 'all_ladies'
                when 'is-gradeColorTakumi'
-                 'Takumi'
+                 'senior'
                end
-
         return kind if kind.present?
-
-        'MenWomenW' if title.match(/男女[wWwＷ]優勝戦/)
+        return 'double_winner' if title.match(/男女[wWwＷ]優勝戦/)
+        'uncategorized'
       end
 
   end
