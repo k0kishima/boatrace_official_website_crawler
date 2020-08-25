@@ -2,7 +2,10 @@ defaults: &defaults
   :verbose: true
   :pidfile: ./tmp/sidekiq.pid
   :queues:
-    - default
+    - [critical, 4]
+    - [high_priority, 3]
+    - [default, 2]
+    - [low_priority, 1]
   :concurrency: 1
 
 development:
