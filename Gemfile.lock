@@ -151,6 +151,8 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
+    sentry-raven (3.0.2)
+      faraday (>= 1.0)
     sidekiq (6.1.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -191,6 +193,7 @@ DEPENDENCIES
   rails (~> 6.0.3, >= 6.0.3.2)
   redis-namespace
   rspec-rails
+  sentry-raven
   sidekiq
   spring
   spring-watcher-listen (~> 2.0.0)
