@@ -20,16 +20,6 @@ module OfficialWebsiteContentRepository
       URI.open("#{BASE_URL}/file?#{query}")
     end
 
-    def event_schedule_file(version: USE_VERSION, year: , month: )
-      query = {
-          version: version,
-          page_type: :event_schedule_page,
-          year: year,
-          month: month,
-      }.to_query
-      URI.open("#{BASE_URL}/file?#{query}")
-    end
-
     def event_holding_file(version: USE_VERSION, date: )
       query = {
           version: version,

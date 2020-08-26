@@ -1,8 +1,8 @@
 module HtmlParser
   extend ActiveSupport::Concern
   included do
-    def initialize(string_or_io)
-      @doc = Nokogiri::HTML.parse(string_or_io)
+    def initialize(file)
+      @doc = Nokogiri::HTML.parse(file.read)
     end
 
     private

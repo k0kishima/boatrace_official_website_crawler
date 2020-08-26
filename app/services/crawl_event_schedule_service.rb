@@ -2,15 +2,15 @@ class CrawlEventScheduleService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_events(events)
+    EventRepository.create_or_update_many(events)
   end
 
   private
 
-    attr_accessor :version, :year, :month
+    attr_accessor :version, :year, :month, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.event_schedule_file(version: version, year: year, month: month)
+    def page
+      @page ||= EventSchedulePageRepository.fetch(version: version, year: year, month: month, no_cache: no_cache)
     end
 
     def parser_class
@@ -18,7 +18,7 @@ class CrawlEventScheduleService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     def status

@@ -16,7 +16,7 @@ namespace :crawl do
     year = (ENV['YEAR'].presence || Time.zone.today.year).to_i
     month = (ENV['MONTH'].presence || Time.zone.today.month).to_i
     date = Date.new(year, month)
-    CrawlEventScheduleService.call(version: official_web_site_version, year: date.year, month: date.month)
+    CrawlEventScheduleJob.perform_later(version: official_web_site_version, year: date.year, month: date.month)
   end
 
   desc 'Crawl event entries on specified date at specified stadium'
