@@ -2,6 +2,19 @@ class EventRepository
   include FundamentalDataRepository
 
   class << self
+    def fetch_many(min_starts_on: , max_starts_on:)
+      connection = ConnectionBuilder.build(BASE_URL)
+      response = connection.get do |req|
+        req.url 'api/internal/v1/events'
+        req.body = {
+            access_token: APP_TOKEN,
+            min_starts_on: min_starts_on,
+            max_starts_on: max_starts_on,
+        }
+      end
+      handle_response(response)
+    end
+
     def create_or_update_many(events)
       connection = ConnectionBuilder.build(BASE_URL)
       response = connection.post do |req|
