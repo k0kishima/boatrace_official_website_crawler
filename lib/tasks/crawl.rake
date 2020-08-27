@@ -21,9 +21,9 @@ namespace :crawl do
 
   desc 'Crawl event entries on specified date at specified stadium'
   task event_entries: :environment do
-    CrawlEventEntryService.call(version: official_web_site_version,
-                                stadium_tel_code: ENV['STADIUM_TEL_CODE'].to_i,
-                                event_starts_on: (ENV['DATE'].presence || Time.zone.today).to_date)
+    CrawlEventEntryJob.perform_later(version: official_web_site_version,
+                                     stadium_tel_code: ENV['STADIUM_TEL_CODE'].to_i,
+                                     event_starts_on: (ENV['DATE'].presence || Time.zone.today).to_date)
   end
 
   desc 'Crawl motor renewal on specified date'

@@ -3,15 +3,15 @@ class CrawlEventEntryService
 
   def call
     # ここではupsertは使わない（パース対象のページから完全データが取れないので使えない）
-    FundamentalDataRepository.create_many_racers(racers)
+    RacerRepository.create_many(racers)
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :event_starts_on
+    attr_accessor :version, :stadium_tel_code, :event_starts_on, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.event_entry_file(version: version, stadium_tel_code: stadium_tel_code, event_starts_on: event_starts_on)
+    def page
+      @page ||= EventEntriesPageRepository.fetch(version: version, stadium_tel_code: stadium_tel_code, event_starts_on: event_starts_on, no_cache: no_cache)
     end
 
     def parser_class
@@ -19,7 +19,7 @@ class CrawlEventEntryService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     Racer = Struct.new(:registration_number, :last_name, :first_name, :gender, keyword_init: true)
