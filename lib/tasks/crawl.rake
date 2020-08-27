@@ -35,7 +35,7 @@ namespace :crawl do
 
   desc 'Crawl information of specified race'
   task race: :environment do
-    CrawlRaceService.call(version: official_web_site_version, **race_params)
+    CrawlRaceJob.perform_later(version: official_web_site_version, **race_params)
   end
 
   desc 'Crawl entries on specified race'
