@@ -8,27 +8,29 @@ class CrawlRaceEntryService
     # かなりリクエスト数増えるが冪等性担保してあるのと、レコードの有無の確認にもそもそもリクエスト発生してその方が余計コスト増えるのでこの方式
     # これが一番シンプルなはず（特にかく全員createしにいく・すでにレコードあったら影響がない）
     #
-    FundamentalDataRepository.create_many_racers(racers)
-    FundamentalDataRepository.create_or_update_many_race_entries(race_entries)
+    RacerRepository.create_many(racers)
+    RaceEntryRepository.create_or_update_many(race_entries)
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.race_information_file(version: version,
-                                                                       stadium_tel_code: stadium_tel_code,
-                                                                       date: date,
-                                                                       race_number: race_number)
+    def page
+      @page ||= RaceInformationPageRepository.fetch(version: version,
+                                                    stadium_tel_code: stadium_tel_code,
+                                                    race_opened_on: date,
+                                                    race_number: race_number,
+                                                    no_cache: no_cache)
     end
+
 
     def parser_class
       @parser_class ||= RaceEntryParserFactory.create(version)
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     RaceEntry = Struct.new(:stadium_tel_code, :date, :race_number, :racer_registration_number, :pit_number, keyword_init: true)
