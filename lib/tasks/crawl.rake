@@ -80,7 +80,7 @@ namespace :crawl do
 
   desc 'Crawl payoff on specified race'
   task payoffs: :environment do
-    CrawlPayoffService.call(version: official_web_site_version, **race_params)
+    CrawlPayoffJob.perform_later(version: official_web_site_version, **race_params)
   end
 
   desc 'Crawl oddses on specified race'
