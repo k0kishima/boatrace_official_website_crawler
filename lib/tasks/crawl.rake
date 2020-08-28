@@ -85,7 +85,7 @@ namespace :crawl do
 
   desc 'Crawl oddses on specified race'
   task oddses: :environment do
-    CrawlOddsService.call(version: official_web_site_version, **race_params)
+    CrawlOddsJob.perform_later(version: official_web_site_version, **race_params)
   end
 
   namespace :bulk do

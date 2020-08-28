@@ -2,18 +2,19 @@ class CrawlOddsService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_oddses(oddes)
+    OddsRepository.create_or_update_many(oddes)
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.race_odds_file(version: version,
-                                                                stadium_tel_code: stadium_tel_code,
-                                                                date: date,
-                                                                race_number: race_number)
+    def page
+      @page ||= RaceOddsPageRepository.fetch(version: version,
+                                             stadium_tel_code: stadium_tel_code,
+                                             date: date,
+                                             race_number: race_number,
+                                             no_cache: no_cache)
     end
 
     def parser_class
@@ -21,7 +22,7 @@ class CrawlOddsService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     Odds = Struct.new(:stadium_tel_code, :date, :race_number, :betting_method, :betting_number, :ratio, keyword_init: true)

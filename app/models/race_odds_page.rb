@@ -6,7 +6,7 @@ class RaceOddsPage < Page
   def params
     {
         stadium_tel_code: stadium_tel_code,
-        race_opened_on: date,
+        race_opened_on: race_opened_on,
         race_number: race_number,
     }
   end
