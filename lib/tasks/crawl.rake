@@ -60,7 +60,7 @@ namespace :crawl do
 
   desc 'Crawl exhibition records on specified race'
   task race_exhibition_records: :environment do
-    CrawlRaceExhibitionRecordService.call(version: official_web_site_version, **race_params)
+    CrawlRaceExhibitionRecordJob.perform_later(version: official_web_site_version, **race_params)
   end
 
   desc 'Crawl records on specified race'
