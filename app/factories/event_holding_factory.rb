@@ -1,3 +1,5 @@
+# Hack:
+# factory じゃなくて repository にした方がいいかも
 class EventHoldingFactory
   CANCELED_TEXTS = %w(中止順延	中止)
 

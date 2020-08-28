@@ -2,6 +2,8 @@ class EventRepository
   include FundamentalDataRepository
 
   class << self
+    # TODO:
+    # はエンティティを返すようにする
     def fetch_many(min_starts_on: , max_starts_on:)
       connection = ConnectionBuilder.build(BASE_URL)
       response = connection.get do |req|
