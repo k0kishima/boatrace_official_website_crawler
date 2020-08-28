@@ -70,7 +70,7 @@ namespace :crawl do
 
   desc 'Crawl boat settings on specified race'
   task boat_settings: :environment do
-    CrawlBoatSettingService.call(version: official_web_site_version, **race_params)
+    CrawlBoatSettingJob.perform_later(version: official_web_site_version, **race_params)
   end
 
   desc 'Crawl motor maintenance on specified race'

@@ -19,7 +19,7 @@ class CrawlRaceEntryService
     def page
       @page ||= RaceInformationPageRepository.fetch(version: version,
                                                     stadium_tel_code: stadium_tel_code,
-                                                    race_opened_on: date,
+                                                    date: date,
                                                     race_number: race_number,
                                                     no_cache: no_cache)
     end
