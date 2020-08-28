@@ -1,4 +1,4 @@
-class WeatherRepository
+class WeatherConditionRepository
   include FundamentalDataRepository
 
   class << self

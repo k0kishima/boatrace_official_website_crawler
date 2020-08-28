@@ -2,12 +2,12 @@ class CrawlWeatherConditionService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_weather_conditions([weather_condition])
+    WeatherConditionRepository.create_or_update_many([weather_condition])
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number, :in_performance
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :in_performance, :no_cache
 
     def race_params
       {
@@ -17,16 +17,16 @@ class CrawlWeatherConditionService
       }
     end
 
-    def exhibition_information_file
-      OfficialWebsiteContentRepository.race_exhibition_information_file(version: version, **race_params)
+    def exhibition_information_page
+      RaceExhibitionInformationPageRepository.fetch(version: version, no_cache: no_cache, **race_params)
     end
 
-    def result_file
-      OfficialWebsiteContentRepository.race_result_file(version: version, **race_params)
+    def result_page
+      RaceResultPageRepository.fetch(version: version, no_cache: no_cache, **race_params)
     end
 
-    def file
-      @file ||=  in_performance ? result_file : exhibition_information_file
+    def page
+      @page ||=  in_performance ? result_page : exhibition_information_page
     end
 
     def parser_class
@@ -34,7 +34,7 @@ class CrawlWeatherConditionService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     WeatherCondition = Struct.new(:stadium_tel_code, :date, :race_number, :in_performance, :weather, :wind_velocity, :wind_angle, :wavelength, :air_temperature, :water_temperature, keyword_init: true)
