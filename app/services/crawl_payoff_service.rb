@@ -2,18 +2,19 @@ class CrawlPayoffService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_payoffs(payoffs)
+    PayoffRepository.create_or_update_many(payoffs)
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.race_result_file(version: version,
-                                                                  stadium_tel_code: stadium_tel_code,
-                                                                  date: date,
-                                                                  race_number: race_number)
+    def page
+      @page ||= RaceResultPageRepository.fetch(version: version,
+                                               stadium_tel_code: stadium_tel_code,
+                                               date: date,
+                                               race_number: race_number,
+                                               no_cache: no_cache)
     end
 
     def parser_class
@@ -21,7 +22,7 @@ class CrawlPayoffService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     Payoff = Struct.new(:stadium_tel_code, :date, :race_number, :betting_method, :betting_number, :amount, keyword_init: true)

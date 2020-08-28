@@ -1,3 +1,5 @@
+# Hack:
+# factory じゃなくて repository にした方がいいかも
 class EventHoldingFactory
   CANCELED_TEXTS = %w(中止順延	中止)
 
@@ -23,11 +25,11 @@ class EventHoldingFactory
       @parser_class ||= EventHoldingParserFactory.create(version)
     end
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.event_holding_file(version: version, date: date)
+    def page
+      @page ||= EventHoldingsPageRepository.fetch(version: version, date: date)
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 end

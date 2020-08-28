@@ -5,15 +5,15 @@ class CrawlMotorRenewalService
   def call
     return if event_entries.blank?
     return if !event_entries.map(&:quinella_rate_of_motor).all?(&:zero?)
-    FundamentalDataRepository.create_or_update_many_motor_renewals([MotorRenewal.new(stadium_tel_code: stadium_tel_code, date: event_starts_on)])
+    MotorRenewalRepository.create_or_update_many([MotorRenewal.new(stadium_tel_code: stadium_tel_code, date: event_starts_on)])
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :event_starts_on
+    attr_accessor :version, :stadium_tel_code, :event_starts_on, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.event_entry_file(version: version, stadium_tel_code: stadium_tel_code, event_starts_on: event_starts_on)
+    def page
+      @page ||= EventEntriesPageRepository.fetch(version: version, stadium_tel_code: stadium_tel_code, event_starts_on: event_starts_on, no_cache: no_cache)
     end
 
     def parser_class
@@ -21,7 +21,7 @@ class CrawlMotorRenewalService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     EventEntry = Struct.new(:quinella_rate_of_motor, keyword_init: true)

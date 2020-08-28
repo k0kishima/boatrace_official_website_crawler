@@ -2,18 +2,19 @@ class CrawlRacerConditionService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_racer_conditions(racer_conditions)
+    RacerConditionRepository.create_or_update_many(racer_conditions)
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.race_exhibition_information_file(version: version,
-                                                                                  stadium_tel_code: stadium_tel_code,
-                                                                                  date: date,
-                                                                                  race_number: race_number)
+    def page
+      @page ||= RaceExhibitionInformationPageRepository.fetch(version: version,
+                                                              stadium_tel_code: stadium_tel_code,
+                                                              date: date,
+                                                              race_number: race_number,
+                                                              no_cache: no_cache)
     end
 
     def parser_class
@@ -21,7 +22,7 @@ class CrawlRacerConditionService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     RacerCondition = Struct.new(:racer_registration_number, :date, :weight, :adjust, keyword_init: true)

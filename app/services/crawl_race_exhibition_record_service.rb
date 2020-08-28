@@ -2,18 +2,19 @@ class CrawlRaceExhibitionRecordService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_race_exhibition_records(race_exhibition_records)
+    RaceExhibitionRecordRepository.create_or_update_many(race_exhibition_records)
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.race_exhibition_information_file(version: version,
-                                                                                  stadium_tel_code: stadium_tel_code,
-                                                                                  date: date,
-                                                                                  race_number: race_number)
+    def page
+      @page ||= RaceExhibitionInformationPageRepository.fetch(version: version,
+                                                              stadium_tel_code: stadium_tel_code,
+                                                              date: date,
+                                                              race_number: race_number,
+                                                              no_cache: no_cache)
     end
 
     def parser_class
@@ -21,7 +22,7 @@ class CrawlRaceExhibitionRecordService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     RaceExhibitionRecord = Struct.new(:stadium_tel_code, :date, :race_number, :pit_number, :course_number, :start_time, :exhibition_time, :exhibition_time_order, :is_flying, keyword_init: true) do

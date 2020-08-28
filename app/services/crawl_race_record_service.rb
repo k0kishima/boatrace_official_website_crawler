@@ -2,20 +2,21 @@ class CrawlRaceRecordService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_race_records(race_records)
-    FundamentalDataRepository.create_or_update_many_winning_race_entries(winning_race_entries)
-    FundamentalDataRepository.create_or_update_many_disqualified_race_entries(disqualified_race_entries) if disqualified_race_entries.present?
+    RaceRecordRepository.create_or_update_many(race_records)
+    WinningRaceEntryRepository.create_or_update_many(winning_race_entries)
+    DisqualifiedRaceEntryRepository.create_or_update_many(disqualified_race_entries) if disqualified_race_entries.present?
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :no_cache
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.race_result_file(version: version,
-                                                                  stadium_tel_code: stadium_tel_code,
-                                                                  date: date,
-                                                                  race_number: race_number)
+    def page
+      @page ||= RaceResultPageRepository.fetch(version: version,
+                                               stadium_tel_code: stadium_tel_code,
+                                               date: date,
+                                               race_number: race_number,
+                                               no_cache: no_cache)
     end
 
     def parser_class
@@ -23,7 +24,7 @@ class CrawlRaceRecordService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     RaceRecord = Struct.new(:stadium_tel_code, :date, :race_number, :pit_number, :course_number, :start_time, :start_order, :time_minute, :time_second, :arrival, :disqualification_mark, keyword_init: true) do

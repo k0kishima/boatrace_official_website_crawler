@@ -70,8 +70,10 @@ GEM
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     ffi (1.13.1)
+    gli (2.19.2)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    hashie (4.1.0)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jp_prefecture (0.10.0)
@@ -151,10 +153,18 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
+    sentry-raven (3.0.2)
+      faraday (>= 1.0)
     sidekiq (6.1.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
+    slack-ruby-client (0.15.0)
+      faraday (>= 1.0)
+      faraday_middleware
+      gli
+      hashie
+      websocket-driver
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -191,7 +201,9 @@ DEPENDENCIES
   rails (~> 6.0.3, >= 6.0.3.2)
   redis-namespace
   rspec-rails
+  sentry-raven
   sidekiq
+  slack-ruby-client
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
