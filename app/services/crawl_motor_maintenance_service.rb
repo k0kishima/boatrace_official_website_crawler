@@ -2,25 +2,27 @@ class CrawlMotorMaintenanceService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.create_or_update_many_motor_maintenances(motor_maintenances) if motor_maintenances.present?
+    MotorMaintenanceRepository.create_or_update_many(motor_maintenances) if motor_maintenances.present?
   end
 
   private
 
-    attr_accessor :version, :stadium_tel_code, :date, :race_number
+    attr_accessor :version, :stadium_tel_code, :date, :race_number, :no_cache
 
-    def race_information_file
-      @race_information_file ||= OfficialWebsiteContentRepository.race_information_file(version: version,
-                                                                                        stadium_tel_code: stadium_tel_code,
-                                                                                        date: date,
-                                                                                        race_number: race_number)
+    def race_information_page
+      @race_information_page ||= RaceInformationPageRepository.fetch(version: version,
+                                                                     stadium_tel_code: stadium_tel_code,
+                                                                     date: date,
+                                                                     race_number: race_number,
+                                                                     no_cache: no_cache)
     end
 
-    def race_exhibition_information_file
-      @race_exhibition_information_file ||= OfficialWebsiteContentRepository.race_exhibition_information_file(version: version,
-                                                                                                              stadium_tel_code: stadium_tel_code,
-                                                                                                              date: date,
-                                                                                                              race_number: race_number)
+    def race_exhibition_information_page
+      @race_exhibition_information_page ||= RaceExhibitionInformationPageRepository.fetch(version: version,
+                                                                                          stadium_tel_code: stadium_tel_code,
+                                                                                          date: date,
+                                                                                          race_number: race_number,
+                                                                                          no_cache: no_cache)
     end
 
     def race_information_parser_class
@@ -32,11 +34,11 @@ class CrawlMotorMaintenanceService
     end
 
     def race_information_parser
-      @race_information_parser ||= race_information_parser_class.new(race_information_file)
+      @race_information_parser ||= race_information_parser_class.new(race_information_page.file)
     end
 
     def motor_maintenance_parser
-      @motor_maintenance_parser ||= motor_maintenance_parser_class.new(race_exhibition_information_file)
+      @motor_maintenance_parser ||= motor_maintenance_parser_class.new(race_exhibition_information_page.file)
     end
 
     MotorMaintenance = Struct.new(:stadium_tel_code, :date, :race_number, :motor_number, :exchanged_parts, :quantity, keyword_init: true)
