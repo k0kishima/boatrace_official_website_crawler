@@ -92,30 +92,16 @@ namespace :crawl do
     desc 'Crawl event entries on specified date'
     task event_entries: :environment do
       date = (ENV['DATE'].presence || Time.zone.today).to_date
-      FundamentalDataRepository.fetch_events(min_starts_on: date, max_starts_on: date).each do |attribute|
-        begin
-          stadium_tel_code = attribute.fetch('stadium_tel_code')
-          CrawlEventEntryService.call(version: official_web_site_version,
-                                      stadium_tel_code: stadium_tel_code,
-                                      event_starts_on: date)
-        rescue ParserError::DataNotFound
-          puts "\tevent(in stadium_tel_code: #{stadium_tel_code}) was cancelled"
-        end
+      EventRepository.fetch_many(min_starts_on: date, max_starts_on: date).each do |attribute|
+        CrawlEventEntryJob.perform_later(version: official_web_site_version, stadium_tel_code: attribute.fetch('stadium_tel_code'), event_starts_on: date)
       end
     end
 
     desc 'Crawl motor renewal on specified date'
     task motor_renewals: :environment do
       date = (ENV['DATE'].presence || Time.zone.today).to_date
-      FundamentalDataRepository.fetch_events(min_starts_on: date, max_starts_on: date).each do |attribute|
-        begin
-          stadium_tel_code = attribute.fetch('stadium_tel_code')
-          CrawlMotorRenewalService.call(version: official_web_site_version,
-                                        stadium_tel_code: attribute.fetch('stadium_tel_code'),
-                                        event_starts_on: date)
-        rescue ParserError::DataNotFound
-          puts "\tevent(in stadium_tel_code: #{stadium_tel_code}) was cancelled"
-        end
+      EventRepository.fetch_many(min_starts_on: date, max_starts_on: date).each do |attribute|
+        CrawlMotorRenewalJob.perform_later(version: official_web_site_version, stadium_tel_code: attribute.fetch('stadium_tel_code'), event_starts_on: date)
       end
     end
   end
