@@ -2,17 +2,17 @@ class CrawlRacerProfileService
   include ServiceBase
 
   def call
-    FundamentalDataRepository.update_racer(racer)
+    RacerRepository.update(racer)
   rescue ::ParserError::DataNotFound
-    FundamentalDataRepository.make_racer_retire(racer_registration_number)
+    RacerRepository.make_retire(racer_registration_number)
   end
 
   private
 
     attr_accessor :version, :racer_registration_number
 
-    def file
-      @file ||= OfficialWebsiteContentRepository.racer_profile_file(version: version, racer_registration_number: racer_registration_number)
+    def page
+      @page ||= RacerProfilePageRepository.fetch(version: version, racer_registration_number: racer_registration_number)
     end
 
     def parser_class
@@ -20,7 +20,7 @@ class CrawlRacerProfileService
     end
 
     def parser
-      @parser ||= parser_class.new(file)
+      @parser ||= parser_class.new(page.file)
     end
 
     # 現行バージョンではgenderはこのパーサーで取れないのでここでは属性に入れてない

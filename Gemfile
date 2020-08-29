@@ -36,6 +36,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+gem 'aws-sdk-sqs'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'jp_prefecture'
@@ -43,5 +44,6 @@ gem 'memoist'
 gem 'nokogiri'
 gem 'redis-namespace'
 gem 'sentry-raven'
+gem 'shoryuken'
 gem 'sidekiq'
 gem 'slack-ruby-client'

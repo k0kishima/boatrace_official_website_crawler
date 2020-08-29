@@ -56,6 +56,18 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
+    aws-eventstream (1.1.0)
+    aws-partitions (1.362.0)
+    aws-sdk-core (3.105.0)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.239.0)
+      aws-sigv4 (~> 1.1)
+      jmespath (~> 1.0)
+    aws-sdk-sqs (1.31.0)
+      aws-sdk-core (~> 3, >= 3.99.0)
+      aws-sigv4 (~> 1.1)
+    aws-sigv4 (1.2.2)
+      aws-eventstream (~> 1, >= 1.0.2)
     bootsnap (1.4.7)
       msgpack (~> 1.0)
     builder (3.2.4)
@@ -76,6 +88,7 @@ GEM
     hashie (4.1.0)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    jmespath (1.4.0)
     jp_prefecture (0.10.0)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -155,6 +168,10 @@ GEM
     rspec-support (3.9.3)
     sentry-raven (3.0.2)
       faraday (>= 1.0)
+    shoryuken (5.0.4)
+      aws-sdk-core (>= 2)
+      concurrent-ruby
+      thor
     sidekiq (6.1.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -189,6 +206,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk-sqs
   bootsnap (>= 1.4.2)
   byebug
   faraday
@@ -202,6 +220,7 @@ DEPENDENCIES
   redis-namespace
   rspec-rails
   sentry-raven
+  shoryuken
   sidekiq
   slack-ruby-client
   spring
