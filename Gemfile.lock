@@ -168,6 +168,10 @@ GEM
     rspec-support (3.9.3)
     sentry-raven (3.0.2)
       faraday (>= 1.0)
+    shoryuken (5.0.4)
+      aws-sdk-core (>= 2)
+      concurrent-ruby
+      thor
     sidekiq (6.1.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -216,6 +220,7 @@ DEPENDENCIES
   redis-namespace
   rspec-rails
   sentry-raven
+  shoryuken
   sidekiq
   slack-ruby-client
   spring
