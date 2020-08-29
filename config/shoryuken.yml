@@ -1,0 +1,7 @@
+concurrency: 2
+delay: 10               # ポーリングの間隔(秒)
+require: ./app/workers  # 使用するworkerを読み込み
+pidfile: tmp/pids/shoryuken.pid
+logfile: ./log/shoryuken.log
+queues:
+  - crawl
