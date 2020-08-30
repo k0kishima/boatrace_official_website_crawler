@@ -28,7 +28,7 @@ module V1707
       end
 
       def canceled?(text)
-        CANCELED_TEXTS.any? {|cancel_text| text.include?(cancel_text) }
+        /\b(#{CANCELED_TEXTS.join('|')})/.match(text)
       end
 
       def day_text(text)
