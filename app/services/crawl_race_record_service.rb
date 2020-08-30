@@ -2,9 +2,14 @@ class CrawlRaceRecordService
   include ServiceBase
 
   def call
-    RaceRecordRepository.create_or_update_many(race_records)
-    WinningRaceEntryRepository.create_or_update_many(winning_race_entries)
-    DisqualifiedRaceEntryRepository.create_or_update_many(disqualified_race_entries) if disqualified_race_entries.present?
+    begin
+      RaceRecordRepository.create_or_update_many(race_records)
+      WinningRaceEntryRepository.create_or_update_many(winning_race_entries)
+      DisqualifiedRaceEntryRepository.create_or_update_many(disqualified_race_entries) if disqualified_race_entries.present?
+    rescue
+      RaceRepository.make_canceled(stadium_tel_code: stadium_tel_code, date: date, race_number: race_number)
+      Notification.new(type: :info).notify("below race canceled.\n#{page.origin_redirection_url}")
+    end
   end
 
   private
