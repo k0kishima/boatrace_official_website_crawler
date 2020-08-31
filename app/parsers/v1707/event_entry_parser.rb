@@ -1,6 +1,6 @@
 module V1707
   class EventEntryParser
-    SERIES_CANCELED_TEXT = '※ データはありません。'
+    DATA_NOT_FOUND_TEXT = '※ データはありません。'
 
     include HtmlParser
 
@@ -13,7 +13,7 @@ module V1707
     # なのでここで取得できなかった性別は当面は運用カバーで手動更新
     # TODO: ↑運用カバーでなんとかしない
     def parse
-      raise ::ParserError::DataNotFound.new if canceled?
+      raise ::ParserError::DataNotFound.new if data_not_found?
 
       series_entry_rows.map do |row|
         cells = row.search('td')
@@ -39,8 +39,8 @@ module V1707
         @series_entry_rows ||= doc.search('.table1 table tbody tr')
       end
 
-      def canceled?
-        doc.search('.l-main').text.match(/#{SERIES_CANCELED_TEXT}/).present?
+      def data_not_found?
+        doc.search('.l-main').text.match(/#{DATA_NOT_FOUND_TEXT}/).present?
       end
   end
 end

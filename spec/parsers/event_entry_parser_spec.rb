@@ -7,7 +7,7 @@ describe 'event entry parsing' do
     let(:parser_class) { V1707::EventEntryParser }
     let(:parser) { parser_class.new(File.new(file_path, 'r')) }
 
-    context 'when series have been canceled' do
+    context 'when data not found' do
       let(:file_path) { "#{Rails.root}/spec/fixtures/files/v1707/event_entry/2020_08_08_17#.html" }
 
       it { expect{ subject }.to raise_error(::ParserError::DataNotFound) }
