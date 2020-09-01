@@ -5,9 +5,8 @@ class CrawlWeatherConditionJob < ApplicationJob
   discard_on ::ParserError::DataNotFound do |_, e|
     Raven.capture_exception(e)
   end
-  discard_on ::ParserError::RaceCanceled do |job, _|
-    page = RaceExhibitionInformationPageRepository.fetch(**job.arguments.first)
-    Notification.new(type: :info).notify("below race canceled.\n#{page.origin_redirection_url}")
+  discard_on ::ParserError::RaceCanceled do |_, e|
+    Raven.capture_exception(e)
   end
 
   def perform(version:, stadium_tel_code:, date:, race_number: , in_performance:)
