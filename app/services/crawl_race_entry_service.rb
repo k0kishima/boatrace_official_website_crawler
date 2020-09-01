@@ -10,6 +10,7 @@ class CrawlRaceEntryService
     #
     RacerRepository.create_many(racers)
     RaceEntryRepository.create_or_update_many(race_entries)
+    DisqualifiedRaceEntryRepository.create_or_update_many(absent_race_entries) if absent_race_entries.present?
   end
 
   private
@@ -50,6 +51,22 @@ class CrawlRaceEntryService
         Racer.new(registration_number: attributes.fetch(:racer_registration_number),
                   last_name: attributes.fetch(:racer_last_name),
                   first_name: attributes.fetch(:racer_first_name))
+      end
+    end
+
+    AbsentRaceEntry = Struct.new(:stadium_tel_code, :date, :race_number, :pit_number, keyword_init: true) do
+      def disqualification
+        :absent
+      end
+    end
+    def absent_race_entries
+      @absent_race_entries ||= parser.parse.select do |attributes|
+        attributes.fetch(:is_absent)
+      end.map do |attributes|
+        AbsentRaceEntry.new(stadium_tel_code: stadium_tel_code,
+                            date: date,
+                            race_number: race_number,
+                            pit_number: attributes.fetch(:pit_number))
       end
     end
 end
