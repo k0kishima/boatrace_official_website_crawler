@@ -21,14 +21,11 @@ class CrawlEventScheduleService
       @parser ||= parser_class.new(page.file)
     end
 
-    def status
-      @status ||= DateTime.new(year, month, 1).in_time_zone.to_date == Time.zone.today ? 'on_going' : 'done'
-    end
-
     Event = Struct.new(:stadium_tel_code, :starts_on, :title, :grade, :kind, :status, keyword_init: true)
     def events
       parser.parse.map do |attributes|
-        Event.new(attributes.slice(*Event.members).merge({status: status}))
+        # status は done と on_going で分けてたけど後者の使い道がなかった
+        Event.new(attributes.slice(*Event.members).merge({status: 'done'}))
       end
     end
 end
