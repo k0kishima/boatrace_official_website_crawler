@@ -2,7 +2,11 @@ class CrawlBoatSettingService
   include ServiceBase
 
   def call
-    BoatSettingRepository.create_or_update_many(boat_settings)
+    begin
+      BoatSettingRepository.create_or_update_many(boat_settings)
+    rescue ::ParserError::DataNotFound => e
+      raise date < Time.zone.today ? e : DataInPreparation.new
+    end
   end
 
   private
