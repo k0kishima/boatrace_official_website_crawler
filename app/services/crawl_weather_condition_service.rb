@@ -2,7 +2,11 @@ class CrawlWeatherConditionService
   include ServiceBase
 
   def call
-    WeatherConditionRepository.create_or_update_many([weather_condition])
+    begin
+      WeatherConditionRepository.create_or_update_many([weather_condition])
+    rescue ::ParserError::DataNotFound => e
+      raise date < Time.zone.today ? e : DataInPreparation.new
+    end
   end
 
   private
