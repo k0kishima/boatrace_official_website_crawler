@@ -27,6 +27,7 @@ describe 'race entry parsing' do
             whole_country_trio_rate_of_racer: 42.3,
             local_quinella_rate_of_racer: 28.5,
             local_trio_rate_of_racer: 57.1,
+            is_absent: false,
           },
           {
             racer_registration_number: 4015,
@@ -44,6 +45,7 @@ describe 'race entry parsing' do
             whole_country_trio_rate_of_racer: 60.9,
             local_trio_rate_of_racer: 76.4,
             whole_country_winning_rate: 6.02,
+            is_absent: false,
           },
           {
             racer_registration_number: 4037,
@@ -61,6 +63,7 @@ describe 'race entry parsing' do
             local_quinella_rate_of_racer: 59.0,
             whole_country_trio_rate_of_racer: 54.0,
             local_trio_rate_of_racer: 77.2,
+            is_absent: false,
           },
           {
             racer_registration_number: 4114,
@@ -78,6 +81,7 @@ describe 'race entry parsing' do
             local_quinella_rate_of_racer: 39.1,
             whole_country_trio_rate_of_racer: 54.3,
             local_trio_rate_of_racer: 52.1,
+            is_absent: false,
           },
           {
             racer_registration_number: 4799,
@@ -95,6 +99,7 @@ describe 'race entry parsing' do
             local_quinella_rate_of_racer: 0.0,
             whole_country_trio_rate_of_racer: 8.1,
             local_trio_rate_of_racer: 8.3,
+            is_absent: false,
           },
           {
             racer_registration_number: 3591,
@@ -112,6 +117,7 @@ describe 'race entry parsing' do
             local_quinella_rate_of_racer: 30.9,
             whole_country_trio_rate_of_racer: 60.3,
             local_trio_rate_of_racer: 54.7,
+            is_absent: false,
           }
         ])
       end
@@ -121,13 +127,13 @@ describe 'race entry parsing' do
       let(:file_path) { "#{Rails.root}/spec/fixtures/files/v1707/race/2015_11_16_03#_11R.html" }
 
       it 'parses race entries which include absent racers' do
-        expect(subject.map{|hash| hash.extract!(:racer_registration_number, :pit_number) }).to eq [
-          { racer_registration_number: 3872, pit_number: 1 },
-          { racer_registration_number: 3880, pit_number: 2 },
-          { racer_registration_number: 3793, pit_number: 3 },
-          { racer_registration_number: 4357, pit_number: 4 },
-          { racer_registration_number: 4037, pit_number: 5 },
-          { racer_registration_number: 3797, pit_number: 6 }
+        expect(subject.map{|hash| hash.extract!(:racer_registration_number, :pit_number, :is_absent) }).to eq [
+          { racer_registration_number: 3872, pit_number: 1, is_absent: true, },
+          { racer_registration_number: 3880, pit_number: 2, is_absent: false, },
+          { racer_registration_number: 3793, pit_number: 3, is_absent: false, },
+          { racer_registration_number: 4357, pit_number: 4, is_absent: false, },
+          { racer_registration_number: 4037, pit_number: 5, is_absent: false, },
+          { racer_registration_number: 3797, pit_number: 6, is_absent: false, }
         ]
       end
     end
