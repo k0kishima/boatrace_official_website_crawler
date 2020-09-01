@@ -56,6 +56,14 @@ describe 'boat setting parsing' do
           expect(subject.map{|d| d[:is_new_propeller] }).to eq([false, false, false, true, false, false])
         end
       end
+
+      context '情報が不完全な場合' do
+        let(:file_path) { "#{Rails.root}/spec/fixtures/files/v1707/race_before_information/2020_06_30_12#_12R.html" }
+
+        it 'raises data not found exception' do
+          expect { subject }.to raise_error(::ParserError::DataNotFound)
+        end
+      end
     end
   end
 end

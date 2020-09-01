@@ -38,7 +38,9 @@ module V1707
       end
 
       def tilt(exhibition_row)
-        exhibition_row.search('td')[5].text.to_f
+        value = exhibition_row.search('td')[5].text
+        raise ::ParserError::DataNotFound if value.blank?
+        value.to_f
       end
 
       def propeller(exhibition_row)
