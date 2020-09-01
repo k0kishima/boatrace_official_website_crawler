@@ -3,6 +3,8 @@ class CrawlRaceExhibitionRecordService
 
   def call
     RaceExhibitionRecordRepository.create_or_update_many(race_exhibition_records)
+  rescue KeyError
+    raise ::ParserError::RaceCanceled
   end
 
   private
