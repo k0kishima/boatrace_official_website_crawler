@@ -1,0 +1,1 @@
+class TooFastToCrawl < StandardError; end
