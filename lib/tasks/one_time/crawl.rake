@@ -58,6 +58,8 @@ namespace :one_time do
             puts "\t\t\tenqueue job which crawl payoffs..."
             Rake::Task['crawl:payoffs'].execute
             puts "\t\t\t\tdone."
+
+            sleep(1)
           end
         end
       end
