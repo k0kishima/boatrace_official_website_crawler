@@ -6,9 +6,8 @@ class CrawlRaceRecordService
       RaceRecordRepository.create_or_update_many(race_records)
       WinningRaceEntryRepository.create_or_update_many(winning_race_entries)
       DisqualifiedRaceEntryRepository.create_or_update_many(disqualified_race_entries) if disqualified_race_entries.present?
-    rescue ParserError::RaceCanceled
+    rescue ::ParserError::RaceCanceled
       RaceRepository.make_canceled(stadium_tel_code: stadium_tel_code, date: date, race_number: race_number)
-      raise
     end
   end
 
@@ -92,6 +91,6 @@ class CrawlRaceRecordService
                                   race_number: race_number,
                                   pit_number: attributes.fetch(:pit_number),
                                   disqualification_mark: attributes.fetch(:disqualification_mark))
-      end
+      end.reject{|race_entry| race_entry.disqualification.nil? }
     end
 end
