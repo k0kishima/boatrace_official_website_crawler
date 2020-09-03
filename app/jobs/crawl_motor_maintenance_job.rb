@@ -1,4 +1,5 @@
 class CrawlMotorMaintenanceJob < ApplicationJob
+  include FileReloadable
   queue_as :high_priority
 
   # NOTE:
