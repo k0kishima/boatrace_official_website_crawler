@@ -58,7 +58,7 @@ class CrawlRaceRecordService
                        time_minute: attributes.fetch(:time_minute),
                        time_second: attributes.fetch(:time_second),
                        arrival: attributes.fetch(:arrival))
-      end
+      end.reject{|race_record| race_record.course_number.nil? }
     end
 
     WinningRaceEntry = Struct.new(:stadium_tel_code, :date, :race_number, :pit_number, :winning_trick_name, keyword_init: true) do
