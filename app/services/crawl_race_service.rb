@@ -46,6 +46,7 @@ class CrawlRaceService
                course_fixed: attributes.fetch(:is_course_fixed),
                use_stabilizer: attributes.fetch(:use_stabilizer),
                deadline_text: attributes.fetch(:deadline),
-               status: 'on_going')
+               # status canceled 以外は done と on_going で分けてたけど今のところ後者の使い道はない
+               status: 'done')
     end
 end

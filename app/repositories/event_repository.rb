@@ -38,5 +38,19 @@ class EventRepository
       handle_response(response)
       true
     end
+
+    def make_canceled(stadium_tel_code:, starts_on:)
+      connection = ConnectionBuilder.build(BASE_URL)
+      response = connection.patch do |req|
+        req.url 'api/internal/v1/events/cancel'
+        req.body = {
+            access_token: APP_TOKEN,
+            stadium_tel_code: stadium_tel_code,
+            starts_on: starts_on,
+        }
+      end
+      handle_response(response)
+      true
+    end
   end
 end

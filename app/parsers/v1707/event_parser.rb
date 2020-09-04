@@ -94,7 +94,7 @@ module V1707
                   'G1'
                 when 'is-gradeColorG2'
                   'G2'
-                when 'is-gradeColorG3'
+                when 'is-gradeColorG3', 'is-gradeColorLady'
                   'G3'
                 end
 

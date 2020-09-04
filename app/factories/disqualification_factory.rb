@@ -23,6 +23,8 @@ class DisqualificationFactory
       :lateness
     when '欠'
       :absent
+    when '＿'
+      nil
     else
       raise NotImplementedError
     end

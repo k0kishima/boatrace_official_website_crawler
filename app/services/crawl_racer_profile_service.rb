@@ -9,10 +9,10 @@ class CrawlRacerProfileService
 
   private
 
-    attr_accessor :version, :racer_registration_number
+    attr_accessor :version, :racer_registration_number, :no_cache
 
     def page
-      @page ||= RacerProfilePageRepository.fetch(version: version, racer_registration_number: racer_registration_number)
+      @page ||= RacerProfilePageRepository.fetch(version: version, racer_registration_number: racer_registration_number, no_cache: no_cache)
     end
 
     def parser_class
@@ -38,7 +38,7 @@ class CrawlRacerProfileService
       Racer.new(
         registration_number: attribute.fetch(:registration_number),
         last_name: attribute.fetch(:last_name),
-        first_name: attribute.fetch(:first_name),
+        first_name: attribute.fetch(:first_name, ''),
         term: attribute.fetch(:term),
         birth_date: attribute.fetch(:birth_date),
         branch_prefecture: attribute.fetch(:branch_prefecture),

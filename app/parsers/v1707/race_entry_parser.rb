@@ -24,6 +24,7 @@ module V1707
             whole_country_trio_rate_of_racer: whole_country_trio_rate_of_racer,
             local_quinella_rate_of_racer: local_quinella_rate_of_racer,
             local_trio_rate_of_racer: local_trio_rate_of_racer,
+            is_absent: is_absent,
         }
       end
       attributes
@@ -97,6 +98,10 @@ module V1707
 
       def local_trio_rate_of_racer
         current_row.search('tr').first.search('td')[5].children.last.text.strip.to_f
+      end
+
+      def is_absent
+        current_row.attribute('class').value.include?('is-miss')
       end
   end
 end
