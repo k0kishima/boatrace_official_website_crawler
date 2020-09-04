@@ -38,7 +38,7 @@ class CrawlRacerProfileService
       Racer.new(
         registration_number: attribute.fetch(:registration_number),
         last_name: attribute.fetch(:last_name),
-        first_name: attribute.fetch(:first_name),
+        first_name: attribute.fetch(:first_name, ''),
         term: attribute.fetch(:term),
         birth_date: attribute.fetch(:birth_date),
         branch_prefecture: attribute.fetch(:branch_prefecture),

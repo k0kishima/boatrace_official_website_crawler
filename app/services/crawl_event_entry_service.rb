@@ -34,7 +34,7 @@ class CrawlEventEntryService
       parser.parse.map do |attributes|
         Racer.new(registration_number: attributes.fetch(:racer_registration_number),
                   last_name: attributes.fetch(:racer_last_name),
-                  first_name: attributes.fetch(:racer_first_name),
+                  first_name: attributes.fetch(:racer_first_name, ''),
                   gender: attributes.fetch(:racer_gender))
       end
     end
