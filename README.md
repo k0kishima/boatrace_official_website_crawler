@@ -1,24 +1,9 @@
-# README
+# boatrace_official_website_crawler
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 概要
 
-Things you may want to cover:
+<a href="https://github.com/togane/boatrace_fundamental_data_server">fundamental_data_server</a>のREADMEに記載したようにデータ収集は自主的に行う必要がある。
 
-* Ruby version
+スクレイピングなどのデータを取り出す処理は本リポジトリで行う。
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+ただしデータの保持は fundamental_data_server で行い、ここでは公式サイトやパース対象のコンテンツのインターフェース飲みに関心を持つ。
