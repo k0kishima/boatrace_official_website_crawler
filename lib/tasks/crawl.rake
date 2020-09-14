@@ -43,6 +43,12 @@ namespace :crawl do
     CrawlRaceEntryJob.perform_later(version: official_web_site_version, **race_params)
   end
 
+  desc 'Crawl racer winning rates on specified race'
+  task racer_winning_rate_aggregations: :environment do
+    CrawlRacerWinningRateAggregationJob.perform_later(version: official_web_site_version, **race_params)
+  end
+
+
   desc 'Crawl racer conditions on specified race'
   task racer_conditions: :environment do
     CrawlRacerConditionJob.perform_later(version: official_web_site_version, **race_params)
