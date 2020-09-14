@@ -11,6 +11,9 @@ class CrawlRaceEntryService
     RacerRepository.create_many(racers)
     RaceEntryRepository.create_or_update_many(race_entries)
     DisqualifiedRaceEntryRepository.create_or_update_many(absent_race_entries) if absent_race_entries.present?
+    # これに関してはこのクラスで処理するのは疑問(CrawlRacerWinningRateAggregationJob みたいに分ければいい)と最初は思ったが、
+    # 処理順序的にレーサーが登録されていないと外部参照整合性が取れないので仕方なくここに実装
+    RacerWinningRateAggregationRepository.create_or_update_many(racer_winning_rate_aggregations)
   end
 
   private
@@ -67,6 +70,18 @@ class CrawlRaceEntryService
                             date: date,
                             race_number: race_number,
                             pit_number: attributes.fetch(:pit_number))
+      end
+    end
+
+    RacerWinningRateAggregation = Struct.new(:racer_registration_number, :aggregated_on, :rate_in_all_stadium, :rate_in_event_going_stadium, keyword_init: true)
+    def racer_winning_rate_aggregations
+      parser.parse.map do |attributes|
+        RacerWinningRateAggregation.new(
+            racer_registration_number: attributes.fetch(:racer_registration_number),
+            aggregated_on: date,
+            rate_in_all_stadium: attributes.fetch(:whole_country_winning_rate),
+            rate_in_event_going_stadium: attributes.fetch(:local_winning_rate)
+        )
       end
     end
 end
