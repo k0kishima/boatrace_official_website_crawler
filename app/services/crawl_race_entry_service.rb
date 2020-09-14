@@ -11,6 +11,8 @@ class CrawlRaceEntryService
     RacerRepository.create_many(racers)
     RaceEntryRepository.create_or_update_many(race_entries)
     DisqualifiedRaceEntryRepository.create_or_update_many(absent_race_entries) if absent_race_entries.present?
+    # これに関してはこのクラスで処理するのは疑問(CrawlRacerWinningRateAggregationJob みたいに分ければいい)と最初は思ったが、
+    # 処理順序的にレーサーが登録されていないと外部参照整合性が取れないので仕方なくここに実装
     RacerWinningRateAggregationRepository.create_or_update_many(racer_winning_rate_aggregations)
   end
 
