@@ -43,6 +43,11 @@ namespace :crawl do
     CrawlRaceEntryJob.perform_later(version: official_web_site_version, **race_params)
   end
 
+  desc 'Crawl motor performance from specified race'
+  task motor_betting_contribute_rate_aggregations: :environment do
+    CrawlMotorBettingContributeRateAggregationJob.perform_later(version: official_web_site_version, **race_params)
+  end
+
   desc 'Crawl racer conditions on specified race'
   task racer_conditions: :environment do
     CrawlRacerConditionJob.perform_later(version: official_web_site_version, **race_params)

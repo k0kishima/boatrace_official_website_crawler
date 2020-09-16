@@ -1,5 +1,7 @@
 module V1707
   class RaceEntryParser
+    NO_DATA_PLACEHOLDER = '-'
+
     extend Memoist
     include HtmlParser
 
@@ -16,8 +18,10 @@ module V1707
             pit_number: i.next,
             motor_number: motor_number,
             quinella_rate_of_motor: quinella_rate_of_motor,
+            trio_rate_of_motor: trio_rate_of_motor,
             boat_number: boat_number,
             quinella_rate_of_boat:  quinella_rate_of_boat,
+            trio_rate_of_boat:  trio_rate_of_boat,
             whole_country_winning_rate: whole_country_winning_rate,
             local_winning_rate: local_winning_rate,
             whole_country_quinella_rate_of_racer: whole_country_quinella_rate_of_racer,
@@ -68,12 +72,22 @@ module V1707
         current_row.search('tr').first.search('td')[6].children[2].text.strip.to_f
       end
 
+      def trio_rate_of_motor
+        text = current_row.search('tr').first.search('td')[6].children[4].text.strip
+        text == NO_DATA_PLACEHOLDER ? nil : text.to_f
+      end
+
       def boat_number
         current_row.search('tr').first.search('td')[7].children.first.text.scan(/(\d+)/).flatten.first.to_i
       end
 
       def quinella_rate_of_boat
         current_row.search('tr').first.search('td')[7].children[2].text.strip.to_f
+      end
+
+      def trio_rate_of_boat
+        text = current_row.search('tr').first.search('td')[7].children[4].text.strip
+        text == NO_DATA_PLACEHOLDER ? nil : text.to_f
       end
 
       def whole_country_winning_rate
