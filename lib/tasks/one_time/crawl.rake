@@ -40,6 +40,10 @@ namespace :one_time do
             Rake::Task['crawl:race'].execute
             puts "\t\t\tenqueue job which crawl race entries..."
             Rake::Task['crawl:race_entries'].execute
+            puts "\t\t\tenqueue job which crawl motor performances..."
+            Rake::Task['crawl:motor_betting_contribute_rate_aggregations'].execute
+            puts "\t\t\tenqueue job which crawl boat performances..."
+            Rake::Task['crawl:boat_betting_contribute_rate_aggregations'].execute
             puts "\t\t\tenqueue job which crawl racer conditions..."
             Rake::Task['crawl:racer_conditions'].execute
             puts "\t\t\tenqueue job which crawl weather condition..."
